@@ -8,7 +8,7 @@ export default defineConfig({
   // ⚠️ GitHub Pages 배포 시 반드시 본인의 레포지토리 이름으로 변경하세요.
   // 예) 레포 이름이 "my-todo-app" 이라면 → base: '/my-todo-app/'
   // 로컬 개발 시에는 '/'로 두거나 이 줄을 주석 처리하세요.
-  base: '/SELab-TodoList/',
+  base: '/TodoList/',
 
   build: {
     rollupOptions: {
