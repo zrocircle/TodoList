@@ -6,7 +6,7 @@ import DashboardPage from './pages/DashboardPage'
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <Routes>
           {/* 공개 라우트 */}
