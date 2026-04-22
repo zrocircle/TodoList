@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── 카테고리 ──────────────────────────────────────────────
+    // 읽기:   members 배열에 포함된 사용자만
+    // 생성:   로그인한 사용자 누구나 (생성 시 자신을 members에 추가)
+    // 수정/삭제: created_by 본인(생성자)만
+    match /categories/{categoryId} {
+      allow read:   if request.auth != null
+                    && request.auth.token.email in resource.data.members;
+      allow create: if request.auth != null
+                    && request.auth.token.email in request.resource.data.members;
+      allow update: if request.auth != null
+                    && request.auth.token.email == resource.data.created_by;
+      allow delete: if request.auth != null
+                    && request.auth.token.email == resource.data.created_by;
+    }
+
+    // ── 할 일 ─────────────────────────────────────────────────
+    // 읽기/수정/삭제: 해당 todo가 속한 카테고리의 members에 포함된 사용자만
+    // 생성:          생성하려는 category_id의 카테고리 members에 포함된 사용자만
+    match /todos/{todoId} {
+      allow read, update, delete:
+        if request.auth != null
+        && request.auth.token.email in
+           get(/databases/$(database)/documents/categories/$(resource.data.category_id))
+           .data.members;
+
+      allow create:
+        if request.auth != null
+        && request.auth.token.email in
+           get(/databases/$(database)/documents/categories/$(request.resource.data.category_id))
+           .data.members;
+    }
+  }
+}
