@@ -9,7 +9,6 @@ const CATEGORY_COLORS = [
 ]
 
 function getCategoryColor(id) {
-  // id 문자열을 숫자로 변환해 일관된 색상 할당
   const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)
   return CATEGORY_COLORS[hash % CATEGORY_COLORS.length]
 }
@@ -51,27 +50,16 @@ export default function CategorySidebar({
               <div key={cat.id}
                 className={[
                   'group flex items-center gap-2.5 px-3 py-2.5 rounded-xl cursor-pointer transition-all',
-                  isSelected
-                    ? 'bg-indigo-50 text-indigo-700'
-                    : 'text-slate-600 hover:bg-slate-50',
+                  isSelected ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50',
                 ].join(' ')}
                 onClick={() => onSelect(cat.id)}
               >
-                {/* 색상 도트 */}
                 <div className={`w-2 h-2 rounded-full shrink-0 ${color}`} />
-
-                {/* 카테고리 이름 */}
                 <span className="flex-1 text-sm font-medium truncate">{cat.name}</span>
-
-                {/* 멤버 수 */}
-                <span className={[
-                  'text-xs shrink-0',
-                  isSelected ? 'text-indigo-400' : 'text-slate-400',
-                ].join(' ')}>
+                <span className={`text-xs shrink-0 ${isSelected ? 'text-indigo-400' : 'text-slate-400'}`}>
                   {cat.members.length}명
                 </span>
 
-                {/* 설정 버튼 — hover 또는 선택 시 표시 */}
                 <button
                   onClick={(e) => { e.stopPropagation(); setManagingCategory(cat) }}
                   className={[
@@ -88,14 +76,11 @@ export default function CategorySidebar({
                   </svg>
                 </button>
 
-                {/* 삭제 버튼 — 생성자 + hover 시만 표시 */}
                 {isCreator && (
                   <button
                     onClick={(e) => { e.stopPropagation(); onDelete(cat) }}
-                    className={[
-                      'p-1 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all shrink-0',
-                      'opacity-0 group-hover:opacity-100',
-                    ].join(' ')}
+                    className="p-1 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50
+                               transition-all shrink-0 opacity-0 group-hover:opacity-100"
                     aria-label="카테고리 삭제"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +110,6 @@ export default function CategorySidebar({
         </div>
       </aside>
 
-      {/* 멤버 관리 모달 */}
       {managingCategory && (
         <ManageMembersModal
           category={managingCategory}
